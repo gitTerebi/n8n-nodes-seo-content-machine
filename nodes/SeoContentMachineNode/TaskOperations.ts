@@ -19,12 +19,6 @@ export const taskOperations: INodeProperties[] = [
 			// 	action: 'Create a task',
 			// },
 			// {
-			// 	name: 'Delete',
-			// 	value: 'delete',
-			// 	description: 'Delete a task',
-			// 	action: 'Delete a task',
-			// },
-			// {
 			// 	name: 'Get',
 			// 	value: 'get',
 			// 	description: 'Get a task',
@@ -41,6 +35,12 @@ export const taskOperations: INodeProperties[] = [
 				value: 'abort',
 				description: 'Abort a running task',
 				action: 'Abort a task',
+			},
+			{
+				name: 'Delete',
+				value: 'delete',
+				description: 'Delete a task',
+				action: 'Delete a task',
 			},
 			{
 				name: 'Start',

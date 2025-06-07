@@ -65,6 +65,9 @@ export class SeoContentMachineNode implements INodeType {
 					if (operation === 'abort') {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/abort/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
+					if (operation === 'delete') {
+						item.json = await this.helpers.httpRequest({url: scm.address + '/task/delete/' + taskId.value + '?apikey=' + scm.apiKey});
+					}
 					if (operation === 'start') {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/start/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
