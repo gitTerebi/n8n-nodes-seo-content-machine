@@ -36,7 +36,7 @@
       "dist/credentials/ScmCredentialsApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/SeoContentMachineNode/SeoContentMachineNode.node.js"
+      "dist/nodes/SeoContentMachine/SeoContentMachine.node.js"
     ]
   },
   "devDependencies": {

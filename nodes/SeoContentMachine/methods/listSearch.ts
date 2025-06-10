@@ -10,16 +10,15 @@ export async function taskSearch(
 	// 	scmConn.apiKey
 
 	const resp = await this.helpers.httpRequest({
-		url: scm.address + '/all-tasks?apikey=' + scm.apiKey
+		url: scm.address + '/task/find?apikey=' + scm.apiKey
 	} as IHttpRequestOptions)
 
 	let returnData: INodeListSearchItems[] = [];
 	if (resp && resp.success) {
 		for (const task of resp.result) {
-
 			returnData.push({
-				name: task.name,
-				value: task.id,
+				name: task.data.jobName,
+				value: task._id,
 				// url: `https://docs.google.com/spreadsheets/d/`,
 			});
 

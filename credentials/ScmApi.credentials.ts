@@ -1,6 +1,6 @@
 import {IAuthenticateGeneric, ICredentialTestRequest, ICredentialType, INodeProperties,} from 'n8n-workflow';
 
-export class ScmCredentialsApi implements ICredentialType {
+export class ScmApi implements ICredentialType {
 	name = 'scmApi';
 	displayName = 'SEO Content Machine API';
 

@@ -1,15 +1,17 @@
 import type {IDataObject, IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription} from 'n8n-workflow';
 import {NodeConnectionType, NodeOperationError} from 'n8n-workflow';
-import {taskGetFields, taskOperations} from "./TaskOperations";
+import {taskOperations} from "./TaskOperations";
+import {otherFields, otherOperations} from "./OtherOperations";
 
 import {listSearch} from './methods';
 
-export class SeoContentMachineNode implements INodeType {
+export class SeoContentMachine implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'SEO Content Machine',
-		name: 'seoContentMachineNode',
+		name: 'seoContentMachine',
 		group: ['transform'],
 		version: 1,
+		subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
 		description: 'SEO Content Machine node',
 		defaults: {
 			name: 'SEO Content Machine',
@@ -30,15 +32,14 @@ export class SeoContentMachineNode implements INodeType {
 				type: 'options',
 				noDataExpression: true,
 				options: [
-					{
-						name: 'Task',
-						value: 'task',
-					},
+					{name: 'Task', value: 'task'},
+					{name: 'Other', value: 'other'},
 				],
 				default: 'task',
 			},
 			...taskOperations,
-			...taskGetFields
+			...otherOperations,
+			...otherFields
 		],
 	};
 
@@ -49,31 +50,70 @@ export class SeoContentMachineNode implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const scm = await this.getCredentials('scmApi');
+		// throw new Error(JSON.stringify(this.getExecuteData()))
 
 		let item: INodeExecutionData;
 
 		for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
 			try {
-
 				const resource = this.getNodeParameter('resource', itemIndex);
 				const operation = this.getNodeParameter('operation', itemIndex);
-				const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-
 				item = items[itemIndex];
 
 				if (resource === 'task') {
+
+					const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
+
 					if (operation === 'abort') {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/abort/' + taskId.value + '?apikey=' + scm.apiKey});
+					}
+					if (operation === 'data') {
+						item.json = await this.helpers.httpRequest({url: scm.address + '/task/data/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 					if (operation === 'delete') {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/delete/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
+					if (operation === 'duplicate') {
+						item.json = await this.helpers.httpRequest({url: scm.address + '/task/duplicate/' + taskId.value + '?apikey=' + scm.apiKey});
+					}
+					if (operation === 'find') {
+						item.json = await this.helpers.httpRequest({url: scm.address + '/all-tasks/delete/' + taskId.value + '?apikey=' + scm.apiKey});
+					}
 					if (operation === 'start') {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/start/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
+					if (operation === 'status') {
+						item.json = await this.helpers.httpRequest({url: scm.address + '/task/status/' + taskId.value + '?apikey=' + scm.apiKey});
+					}
+
 				}
 
-			} catch (error) {
+				if (resource === 'other') {
+
+					if (operation === 'about') {
+						const aboutKeyword = this.getNodeParameter('aboutKeyword', itemIndex);
+
+						item.json = await this.helpers.httpRequest({
+							url: scm.address + '/aboutme?apikey=' + scm.apiKey + '&keyword=' + aboutKeyword
+						})
+					}
+
+					if (operation === 'spin') {
+						const spinText = this.getNodeParameter('spinText', itemIndex);
+						const csvprotectedwords = this.getNodeParameter('csvprotectedwords', itemIndex);
+
+						item.json = await this.helpers.request({
+							method: "POST",
+							uri: scm.address + '/spin?apikey=' + scm.apiKey,
+							body: {text: spinText, csvprotectedwords},
+							json: true,
+						});
+					}
+
+				}
+
+			} catch
+				(error) {
 				// This node should never fail but we want to showcase how
 				// to handle errors.
 				if (this.continueOnFail()) {
