@@ -75,4 +75,3 @@ export const otherFields: INodeProperties[] = [
 		description: 'CSV list of keywords to protect',
 	},
 ];
-

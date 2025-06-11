@@ -2,7 +2,6 @@ import type {IDataObject, IExecuteFunctions, INodeExecutionData, INodeType, INod
 import {NodeConnectionType, NodeOperationError} from 'n8n-workflow';
 import {taskOperations} from "./TaskOperations";
 import {otherFields, otherOperations} from "./OtherOperations";
-
 import {listSearch} from './methods';
 
 export class SeoContentMachine implements INodeType {
@@ -50,7 +49,6 @@ export class SeoContentMachine implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const scm = await this.getCredentials('scmApi');
-		// throw new Error(JSON.stringify(this.getExecuteData()))
 
 		let item: INodeExecutionData;
 
@@ -77,7 +75,7 @@ export class SeoContentMachine implements INodeType {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/duplicate/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 					if (operation === 'find') {
-						item.json = await this.helpers.httpRequest({url: scm.address + '/all-tasks/delete/' + taskId.value + '?apikey=' + scm.apiKey});
+						item.json = await this.helpers.httpRequest({url: scm.address + '/task/find/?apikey=' + scm.apiKey});
 					}
 					if (operation === 'start') {
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/start/' + taskId.value + '?apikey=' + scm.apiKey});

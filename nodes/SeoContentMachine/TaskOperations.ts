@@ -96,6 +96,7 @@ export const taskOperations: INodeProperties[] = [
 		},
 	},
 ];
+
 //
 // export const taskFields: INodeProperties[] = [
 // 	{

@@ -33,7 +33,7 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ScmCredentialsApi.credentials.js"
+      "dist/credentials/ScmApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/SeoContentMachine/SeoContentMachine.node.js"
