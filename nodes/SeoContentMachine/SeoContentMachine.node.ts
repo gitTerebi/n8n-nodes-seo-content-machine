@@ -1,6 +1,6 @@
 import type {IDataObject, IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription} from 'n8n-workflow';
 import {NodeConnectionType, NodeOperationError} from 'n8n-workflow';
-import {taskOperations} from "./TaskOperations";
+import {taskFields, taskOperations} from "./TaskOperations";
 import {otherFields, otherOperations} from "./OtherOperations";
 import {listSearch} from './methods';
 
@@ -37,6 +37,7 @@ export class SeoContentMachine implements INodeType {
 				default: 'task',
 			},
 			...taskOperations,
+			...taskFields,
 			...otherOperations,
 			...otherFields
 		],
@@ -60,27 +61,38 @@ export class SeoContentMachine implements INodeType {
 
 				if (resource === 'task') {
 
-					const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
+					if (operation === 'find') {
+						item.json = await this.helpers.httpRequest({
+							url: scm.address + '/task/find/?apikey=' + scm.apiKey +
+								'?&type=' + this.getNodeParameter('taskType', itemIndex) +
+								'&group=' + (this.getNodeParameter('taskGroup', itemIndex) as IDataObject).value +
+								'&name=' + this.getNodeParameter('taskName', itemIndex) +
+								'&status=' + this.getNodeParameter('taskStatus', itemIndex)
+						});
+					}
 
 					if (operation === 'abort') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/abort/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 					if (operation === 'data') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/data/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 					if (operation === 'delete') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/delete/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 					if (operation === 'duplicate') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/duplicate/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
-					if (operation === 'find') {
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/find/?apikey=' + scm.apiKey});
-					}
 					if (operation === 'start') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/start/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 					if (operation === 'status') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/status/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
 
@@ -89,21 +101,17 @@ export class SeoContentMachine implements INodeType {
 				if (resource === 'other') {
 
 					if (operation === 'about') {
-						const aboutKeyword = this.getNodeParameter('aboutKeyword', itemIndex);
-
 						item.json = await this.helpers.httpRequest({
-							url: scm.address + '/aboutme?apikey=' + scm.apiKey + '&keyword=' + aboutKeyword
+							url: scm.address + '/aboutme?apikey=' + scm.apiKey +
+								'&keyword=' + this.getNodeParameter('aboutKeyword', itemIndex)
 						})
 					}
 
 					if (operation === 'spin') {
-						const spinText = this.getNodeParameter('spinText', itemIndex);
-						const csvprotectedwords = this.getNodeParameter('csvprotectedwords', itemIndex);
-
 						item.json = await this.helpers.request({
 							method: "POST",
 							uri: scm.address + '/spin?apikey=' + scm.apiKey,
-							body: {text: spinText, csvprotectedwords},
+							body: {text: this.getNodeParameter('spinText', itemIndex), csvprotectedwords: this.getNodeParameter('csvprotectedwords', itemIndex)},
 							json: true,
 						});
 					}

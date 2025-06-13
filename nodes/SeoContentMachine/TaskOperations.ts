@@ -57,11 +57,20 @@ export const taskOperations: INodeProperties[] = [
 		],
 		default: 'start',
 	},
+];
+
+export const taskFields: INodeProperties[] = [
 	{
 		displayName: 'Task',
 		name: 'taskId',
 		type: 'resourceLocator',
 		default: {mode: 'list', value: ''},
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['abort', 'data', 'delete', 'duplicate', 'start', 'status'],
+			}
+		},
 		required: true,
 		modes: [
 			{
@@ -86,76 +95,101 @@ export const taskOperations: INodeProperties[] = [
 						},
 					},
 				],
-				url: '=https://docs.google.com/spreadsheets/d/{{$value}}/edit',
+				// url: '=https://docs.google.com/spreadsheets/d/{{$value}}/edit',
 			},
+		],
+	},
+	{
+		displayName: 'Type',
+		name: 'taskType',
+		type: 'options',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['find'],
+			},
+		},
+		options: [
+			{name: '', value: ''},
+			{name: 'AI Writer', value: 'writing assistant'},
+			{name: 'Article Creator', value: 'article creator'},
+			{name: 'CSV Template Merge', value: 'mail merge'},
+			{name: 'Dynamic Page', value: 'web scraper'},
+			{name: 'Google Maps Scraper', value: 'google maps scraper'},
+			{name: 'Keyword Finder', value: 'keyword finder'},
+			{name: 'Post Emailer', value: 'post emailer'},
+			{name: 'Post Uploader', value: 'post uploader'},
+			{name: 'RSS Scraper', value: 'rss scraper'},
+			{name: 'Search & News', value: 'google scraper'},
+			{name: 'Spin & Translate', value: 'bulk translator'},
+			{name: 'Static Page', value: 'article downloader'},
+			{name: 'Url Finder', value: 'url finder'},
+			{name: 'Wayback Scraper', value: 'wayback scraper'},
+			{name: 'Web Crawler', value: 'web crawler'},
+			{name: 'WP XML Generator', value: 'wp xml generator'},
+			{name: 'Youtube Sub Scraper', value: 'youtube sub scraper'},
+		],
+		description: 'Type of task',
+	},
+	{
+		displayName: 'Group',
+		name: 'taskGroup',
+		type: 'resourceLocator',
+		default: {mode: 'list', value: ''},
+		modes: [
+			{
+				displayName: 'From List',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'groupSearch',
+					searchable: true,
+				},
+			}
 		],
 		displayOptions: {
 			show: {
 				resource: ['task'],
+				operation: ['find'],
 			},
 		},
+		description: 'Group of task',
+	},
+	{
+		displayName: 'Name',
+		name: 'taskName',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['find'],
+			},
+		},
+		description: 'Name of task',
+	},
+	{
+		displayName: 'Status',
+		name: 'taskStatus',
+		type: 'options',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['find'],
+			},
+		},
+		options: [
+			{name: '', value: ''},
+			{name: 'Aborted', value: 'aborted'},
+			{name: 'Done', value: 'done'},
+			{name: 'Draft', value: 'draft'},
+			{name: 'Failed', value: 'failed'},
+			{name: 'Running', value: 'running'},
+			{name: 'Waiting', value: 'waiting'},
+		],
+		description: 'Group of task',
 	},
 ];
-
-//
-// export const taskFields: INodeProperties[] = [
-// 	{
-// 		displayName: 'Task ID',
-// 		name: 'taskId',
-// 		type: 'string',
-// 		required: true,
-// 		default: '',
-// 		displayOptions: {
-// 			show: {
-// 				resource: ['task'],
-// 				operation: ['get'],
-// 			},
-// 		},
-// 		description: 'Unique identifier for the object',
-// 	},
-// 	{
-// 		displayName: 'Options',
-// 		name: 'options',
-// 		type: 'collection',
-// 		placeholder: 'Add option',
-// 		default: {},
-// 		displayOptions: {
-// 			show: {
-// 				resource: ['task'],
-// 				operation: ['get'],
-// 			},
-// 		},
-// 		options: [
-// 			{
-// 				displayName: 'Password',
-// 				name: 'password',
-// 				type: 'string',
-// 				typeOptions: {password: true},
-// 				default: '',
-// 				description: 'The password for the task if it is password protected',
-// 			},
-// 			{
-// 				displayName: 'Context',
-// 				name: 'context',
-// 				type: 'options',
-// 				options: [
-// 					{
-// 						name: 'View',
-// 						value: 'view',
-// 					},
-// 					{
-// 						name: 'Embed',
-// 						value: 'embed',
-// 					},
-// 					{
-// 						name: 'Edit',
-// 						value: 'edit',
-// 					},
-// 				],
-// 				default: 'view',
-// 				description: 'Scope under which the request is made; determines fields present in response',
-// 			},
-// 		],
-// 	},
-// ];
 
