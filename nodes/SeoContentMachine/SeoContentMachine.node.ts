@@ -61,6 +61,13 @@ export class SeoContentMachine implements INodeType {
 
 				if (resource === 'task') {
 
+					if (operation === 'create') {
+						const taskType = <string>this.getNodeParameter('taskType', itemIndex);
+						item.json = await this.helpers.httpRequest({
+							url: scm.address + '/create/' + taskType.replace(/ /, '') + '/?apikey=' + scm.apiKey
+						});
+					}
+
 					if (operation === 'find') {
 						item.json = await this.helpers.httpRequest({
 							url: scm.address + '/task/find/?apikey=' + scm.apiKey +

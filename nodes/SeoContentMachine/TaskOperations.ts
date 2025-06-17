@@ -19,6 +19,12 @@ export const taskOperations: INodeProperties[] = [
 				action: 'Abort a task',
 			},
 			{
+				name: 'Create',
+				value: 'create',
+				description: 'Create a new task',
+				action: 'Create a task',
+			},
+			{
 				name: 'Data',
 				value: 'data',
 				description: 'Get task data',
@@ -107,7 +113,7 @@ export const taskFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['task'],
-				operation: ['find'],
+				operation: ['find', 'create'],
 			},
 		},
 		options: [

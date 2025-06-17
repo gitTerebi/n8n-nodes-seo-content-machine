@@ -20,8 +20,9 @@ export class ScmApi implements ICredentialType {
 			displayName: 'API key',
 			name: 'apiKey',
 			type: 'string',
+			typeOptions: {password: true},
 			default: '',
-		},
+		}
 	];
 
 	// This credential is currently not used by any node directly
