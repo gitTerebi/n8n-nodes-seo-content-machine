@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gitTerebi/n8n-nodes-seo-content-machine.git"
+    "url": "https://github.com/gitTerebi/n8n-nodes-seo-content-machine"
   },
   "engines": {
     "node": ">=20.15"
