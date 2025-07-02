@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-seo-content-machine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n community node for SEO Content Machine",
   "keywords": [
     "n8n-community-node-package"
@@ -10,6 +10,10 @@
   "author": {
     "name": "seocontentmachine",
     "email": "npm@seocontentmachine.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitTerebi/n8n-nodes-seo-content-machine"
   },
   "engines": {
     "node": ">=20.15"

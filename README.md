@@ -2,7 +2,7 @@
 
 This is a n8n community node. It lets you use SEO Content Machine in your n8n workflows.
 
-SEO Content Machine is a scraper and AI content generator desktop tool.
+SEO Content Machine (https://seocontentmachine.com)  is a scraper and AI content generator desktop tool.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
