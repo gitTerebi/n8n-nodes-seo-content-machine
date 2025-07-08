@@ -1,5 +1,5 @@
 import type {IDataObject, IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription} from 'n8n-workflow';
-import {NodeConnectionType, NodeOperationError} from 'n8n-workflow';
+import {ApplicationError, NodeConnectionType, NodeOperationError} from 'n8n-workflow';
 import {taskFields, taskOperations} from "./TaskOperations";
 import {otherFields, otherOperations} from "./OtherOperations";
 import {listSearch} from './methods';
@@ -8,6 +8,7 @@ export class SeoContentMachine implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'SEO Content Machine',
 		name: 'seoContentMachine',
+		icon: 'file:cogs256.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
@@ -63,6 +64,9 @@ export class SeoContentMachine implements INodeType {
 
 					if (operation === 'create') {
 						const taskType = <string>this.getNodeParameter('taskType', itemIndex);
+
+						if (taskType.trim().length === 0) throw new ApplicationError("Please select a task")
+
 						item.json = await this.helpers.httpRequest({
 							url: scm.address + '/create/' + taskType.replace(/ /, '') + '/?apikey=' + scm.apiKey
 						});

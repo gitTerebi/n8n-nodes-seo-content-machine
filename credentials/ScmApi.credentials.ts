@@ -3,7 +3,7 @@ import {IAuthenticateGeneric, ICredentialTestRequest, ICredentialType, INodeProp
 export class ScmApi implements ICredentialType {
 	name = 'scmApi';
 	displayName = 'SEO Content Machine API';
-
+	icon = 'file:cogs256.svg' as const;
 	documentationUrl = 'https://seocontentmachine.com/api-docs';
 
 	properties: INodeProperties[] = [
