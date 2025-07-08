@@ -59,6 +59,12 @@ export const taskOperations: INodeProperties[] = [
 				value: 'status',
 				description: 'Get task status',
 				action: 'Get task status',
+			},
+			{
+				name: 'Update',
+				value: 'update',
+				description: 'Update task data',
+				action: 'Update task data',
 			}
 		],
 		default: 'start',
@@ -74,7 +80,7 @@ export const taskFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['task'],
-				operation: ['abort', 'data', 'delete', 'duplicate', 'start', 'status'],
+				operation: ['abort', 'data', 'delete', 'duplicate', 'start', 'status', 'update'],
 			}
 		},
 		required: true,
@@ -197,5 +203,22 @@ export const taskFields: INodeProperties[] = [
 		],
 		description: 'Group of task',
 	},
-];
+	{
+		displayName: 'Task Data',
+		name: 'taskData',
+		type: 'json',
+		required: true,
+		default: '',
+		typeOptions: {
+			rows: 16,
+		},
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['update'],
+			},
+		},
+		description: 'Task data JSON',
+	},
 
+];

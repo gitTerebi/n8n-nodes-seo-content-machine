@@ -102,7 +102,15 @@ export class SeoContentMachine implements INodeType {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						item.json = await this.helpers.httpRequest({url: scm.address + '/task/status/' + taskId.value + '?apikey=' + scm.apiKey});
 					}
-
+					if (operation === 'update') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
+						item.json = await this.helpers.request({
+							method: "POST",
+							uri: scm.address + '/task/data/' + taskId + '?apikey=' + scm.apiKey,
+							body: this.getNodeParameter('taskData', itemIndex),
+							json: true,
+						});
+					}
 				}
 
 				if (resource === 'other') {
