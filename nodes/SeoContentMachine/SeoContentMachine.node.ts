@@ -1,5 +1,5 @@
-import type {IDataObject, IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription} from 'n8n-workflow';
-import {ApplicationError, NodeConnectionType, NodeOperationError} from 'n8n-workflow';
+import type {IDataObject, IExecuteFunctions, IHttpRequestOptions, INodeExecutionData, INodeType, INodeTypeDescription} from 'n8n-workflow';
+import {NodeConnectionType, NodeOperationError} from 'n8n-workflow';
 import {taskFields, taskOperations} from "./TaskOperations";
 import {otherFields, otherOperations} from "./OtherOperations";
 import {listSearch} from './methods';
@@ -50,7 +50,7 @@ export class SeoContentMachine implements INodeType {
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
-		const scm = await this.getCredentials('scmApi');
+		const {address} = await this.getCredentials('scmApi'); //only need address as baseURL
 
 		let item: INodeExecutionData;
 
@@ -61,78 +61,107 @@ export class SeoContentMachine implements INodeType {
 				item = items[itemIndex];
 
 				if (resource === 'task') {
-
 					if (operation === 'create') {
-						const taskType = <string>this.getNodeParameter('taskType', itemIndex);
-
-						if (taskType.trim().length === 0) throw new ApplicationError("Please select a task")
-
-						item.json = await this.helpers.httpRequest({
-							url: scm.address + '/create/' + taskType.replace(/ /, '') + '/?apikey=' + scm.apiKey
-						});
+						const taskType = this.getNodeParameter('taskType', itemIndex) as string;
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: `/create/${taskType.replace(/ /, '')}/`,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 
 					if (operation === 'find') {
-						item.json = await this.helpers.httpRequest({
-							url: scm.address + '/task/find/?apikey=' + scm.apiKey +
-								'?&type=' + this.getNodeParameter('taskType', itemIndex) +
-								'&group=' + (this.getNodeParameter('taskGroup', itemIndex) as IDataObject).value +
-								'&name=' + this.getNodeParameter('taskName', itemIndex) +
-								'&status=' + this.getNodeParameter('taskStatus', itemIndex)
-						});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/find/',
+							qs: {
+								// these will be added to the qs (which already contains the api key)
+								type: this.getNodeParameter('taskType', itemIndex) as string,
+								group: (this.getNodeParameter('taskGroup', itemIndex) as IDataObject).value as string,
+								name: this.getNodeParameter('taskName', itemIndex) as string,
+								status: this.getNodeParameter('taskStatus', itemIndex) as string,
+							},
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 
 					if (operation === 'abort') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/abort/' + taskId.value + '?apikey=' + scm.apiKey});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/abort/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 					if (operation === 'data') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/data/' + taskId.value + '?apikey=' + scm.apiKey});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/data/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 					if (operation === 'delete') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/delete/' + taskId.value + '?apikey=' + scm.apiKey});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/delete/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 					if (operation === 'duplicate') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/duplicate/' + taskId.value + '?apikey=' + scm.apiKey});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/duplicate/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 					if (operation === 'start') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/start/' + taskId.value + '?apikey=' + scm.apiKey});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/start/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 					if (operation === 'status') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.httpRequest({url: scm.address + '/task/status/' + taskId.value + '?apikey=' + scm.apiKey});
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/status/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 					if (operation === 'update') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
-						item.json = await this.helpers.request({
-							method: "POST",
-							uri: scm.address + '/task/data/' + taskId.value + '?apikey=' + scm.apiKey,
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
 							body: this.getNodeParameter('taskData', itemIndex),
-							json: true,
-						});
+							url: '/task/data/' + taskId.value,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 				}
 
 				if (resource === 'other') {
 
 					if (operation === 'about') {
-						item.json = await this.helpers.httpRequest({
-							url: scm.address + '/aboutme?apikey=' + scm.apiKey +
-								'&keyword=' + this.getNodeParameter('aboutKeyword', itemIndex)
-						})
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/aboutme',
+							qs: {keyword: this.getNodeParameter('aboutKeyword', itemIndex) as string}
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 
 					if (operation === 'spin') {
-						item.json = await this.helpers.request({
-							method: "POST",
-							uri: scm.address + '/spin?apikey=' + scm.apiKey,
+						const options: IHttpRequestOptions = {
+							method: 'POST', baseURL: address as string, json: true,
+							url: `/spin`,
 							body: {text: this.getNodeParameter('spinText', itemIndex), csvprotectedwords: this.getNodeParameter('csvprotectedwords', itemIndex)},
-							json: true,
-						});
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
 
 				}
