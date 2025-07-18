@@ -19,6 +19,12 @@ export const taskOperations: INodeProperties[] = [
 				action: 'Abort a task',
 			},
 			{
+				name: 'Content',
+				value: 'content',
+				description: 'Gets content created by a task',
+				action: 'Get content from task',
+			},
+			{
 				name: 'Create',
 				value: 'create',
 				description: 'Create a new task',
@@ -80,7 +86,7 @@ export const taskFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['task'],
-				operation: ['abort', 'data', 'delete', 'duplicate', 'start', 'status', 'update'],
+				operation: ['abort', 'content', 'data', 'delete', 'duplicate', 'start', 'status', 'update'],
 			}
 		},
 		required: true,
@@ -220,5 +226,20 @@ export const taskFields: INodeProperties[] = [
 		},
 		description: 'Task data JSON',
 	},
+
+	{
+		displayName: 'Task Content Path',
+		name: 'taskContentPath',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['content'],
+			},
+		},
+		description: 'Optional task content path to content in sub-folders',
+	},
+
 
 ];

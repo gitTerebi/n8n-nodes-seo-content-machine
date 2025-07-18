@@ -93,6 +93,18 @@ export class SeoContentMachine implements INodeType {
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
+
+					if (operation === 'content') {
+						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
+						const contentPath = this.getNodeParameter('taskContentPath', itemIndex) as string;
+
+						const options: IHttpRequestOptions = {
+							method: 'GET', baseURL: address as string, json: true,
+							url: '/task/content/' + taskId.value + '/' + contentPath,
+						};
+						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
+					}
+
 					if (operation === 'data') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
@@ -101,6 +113,7 @@ export class SeoContentMachine implements INodeType {
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
+
 					if (operation === 'delete') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
@@ -109,6 +122,7 @@ export class SeoContentMachine implements INodeType {
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
+
 					if (operation === 'duplicate') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
@@ -117,6 +131,7 @@ export class SeoContentMachine implements INodeType {
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
+
 					if (operation === 'start') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
