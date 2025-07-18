@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-seo-content-machine",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "n8n community node for SEO Content Machine",
   "keywords": [
     "n8n-community-node-package"

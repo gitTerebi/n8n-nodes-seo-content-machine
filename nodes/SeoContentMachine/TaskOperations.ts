@@ -226,9 +226,8 @@ export const taskFields: INodeProperties[] = [
 		},
 		description: 'Task data JSON',
 	},
-
 	{
-		displayName: 'Task Content Path',
+		displayName: 'Content Path',
 		name: 'taskContentPath',
 		type: 'string',
 		default: '',
@@ -240,6 +239,4 @@ export const taskFields: INodeProperties[] = [
 		},
 		description: 'Optional task content path to content in sub-folders',
 	},
-
-
 ];
