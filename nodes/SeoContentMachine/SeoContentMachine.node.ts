@@ -140,6 +140,7 @@ export class SeoContentMachine implements INodeType {
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
+
 					if (operation === 'status') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
@@ -153,7 +154,7 @@ export class SeoContentMachine implements INodeType {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
 							method: 'POST', baseURL: address as string, json: true,
-							body: this.getNodeParameter('taskData', itemIndex),
+							body: JSON.parse(this.getNodeParameter('taskData', itemIndex) as string),
 							url: '/task/data/' + taskId.value,
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
@@ -174,8 +175,8 @@ export class SeoContentMachine implements INodeType {
 					if (operation === 'spin') {
 						const options: IHttpRequestOptions = {
 							method: 'POST', baseURL: address as string, json: true,
-							url: `/spin`,
 							body: {text: this.getNodeParameter('spinText', itemIndex), csvprotectedwords: this.getNodeParameter('csvprotectedwords', itemIndex)},
+							url: `/spin`,
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
