@@ -148,10 +148,11 @@ export class SeoContentMachine implements INodeType {
 						};
 						item.json = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 					}
+
 					if (operation === 'update') {
 						const taskId = this.getNodeParameter('taskId', itemIndex) as IDataObject;
 						const options: IHttpRequestOptions = {
-							method: 'GET', baseURL: address as string, json: true,
+							method: 'POST', baseURL: address as string, json: true,
 							body: this.getNodeParameter('taskData', itemIndex),
 							url: '/task/data/' + taskId.value,
 						};
