@@ -2,13 +2,10 @@ import type {IHttpRequestOptions, ILoadOptionsFunctions, INodeListSearchItems, I
 
 export async function taskSearch(this: ILoadOptionsFunctions, _filter?: string,): Promise<INodeListSearchResult> {
 
-	const scm = await this.getCredentials('scmApi');
-	// scmConn.address
-	// 	scmConn.apiKey
+	const {address} = await this.getCredentials('scmApi'); //only need address as baseURL
 
-	const resp = await this.helpers.httpRequest({
-		url: scm.address + '/task/find?apikey=' + scm.apiKey
-	} as IHttpRequestOptions)
+	const options: IHttpRequestOptions = {method: 'GET', baseURL: address as string, json: true, url: '/task/find/'};
+	const resp = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 
 	let returnData: INodeListSearchItems[] = [];
 	if (resp && resp.success) {
@@ -30,13 +27,9 @@ export async function taskSearch(this: ILoadOptionsFunctions, _filter?: string,)
 
 export async function groupSearch(this: ILoadOptionsFunctions, _filter?: string,): Promise<INodeListSearchResult> {
 
-	const scm = await this.getCredentials('scmApi');
-	// scmConn.address
-	// 	scmConn.apiKey
-
-	const resp = await this.helpers.httpRequest({
-		url: scm.address + '/task/groups?apikey=' + scm.apiKey
-	} as IHttpRequestOptions)
+	const {address} = await this.getCredentials('scmApi'); //only need address as baseURL
+	const options: IHttpRequestOptions = {method: 'GET', baseURL: address as string, json: true, url: '/task/groups/'};
+	const resp = await this.helpers.httpRequestWithAuthentication.call(this, 'scmApi', options,);
 
 	let returnData: INodeListSearchItems[] = [{name: '', value: ''}];
 	if (resp && resp.success) {
