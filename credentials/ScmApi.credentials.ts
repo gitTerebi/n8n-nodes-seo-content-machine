@@ -4,7 +4,7 @@ export class ScmApi implements ICredentialType {
 	name = 'scmApi';
 	displayName = 'SEO Content Machine API';
 	icon = 'file:cogs256.svg' as const;
-	documentationUrl = 'https://seocontentmachine.com/api-docs';
+	documentationUrl = 'https://forum.seocontentmachine.com/t/how-to-install-and-configure-scm-n8n-node';
 
 	properties: INodeProperties[] = [
 		// The credentials to get from user and save encrypted.
